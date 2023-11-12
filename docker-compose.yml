@@ -1,0 +1,238 @@
+services:
+  db:
+    container_name: postgres_container_center_server
+    image: postgres
+    env_file:
+      - ./CenterServer/.env.db
+    volumes:
+      - /data_kc_center/postgres_db_center:/data/postgres
+    ports:
+      - "7770:5432"
+    restart: unless-stopped
+    networks:
+      center-server: null
+  redis:
+    container_name: redis_center_server
+    image: redis
+    ports:
+      - "6400:6379"
+    restart: unless-stopped
+    networks:
+      center-server: null
+
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana-center
+    depends_on:
+      - db
+    ports:
+      - 7771:3000
+    environment:
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+    volumes:
+      - ./data_kc_center/grafana_data:/var/lib/grafana
+    user: "$UID:$GID"
+    restart: unless-stopped
+    networks:
+      center-server: null
+
+  elasticsearch:
+    container_name: es-container-center
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    volumes:
+      - ./data_kc_center/elasticsearch_data:/usr/share/elasticsearch/data
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+      - xpack.security.enabled=false
+      - "discovery.type=single-node"
+    networks:
+      center-server: null
+    ports:
+      - 7772:9200
+    restart: always
+    deploy:
+      resources:
+          limits:
+            memory: 4GB  # Use at most 50 MB of RAM
+  kibana:
+    container_name: kb-container-center
+    image: docker.elastic.co/kibana/kibana:8.6.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es-container:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - 7773:5601
+    restart: unless-stopped
+    networks:
+      center-server: null
+
+  backend:
+    build:
+      context: ./CenterServer
+      args:
+        DJANGO_ALLOWED_HOSTS: "*"
+        DJANGO_SECRET_KEY: "*"
+        DJANGO_CORS_ORIGIN_WHITELIST: "*"
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate --noinput && python manage.py loaddata initial_auth_user_data.json && python manage.py loaddata initial_menus_data.json && python manage.py loaddata initial_auth_group_data.json && python manage.py loaddata initial_auth_user_groups_data.json && python manage.py loaddata initial_group_menus_data.json && python manage.py runserver 0.0.0.0:9000"
+    volumes:
+      - ./CenterServer:/CenterServer
+    env_file:
+      - ./CenterServer/.env.dev
+    ports:
+      - "7774:9000"
+    depends_on:
+      - redis
+      - db
+    links:
+      - db:db
+      - redis:redis
+    restart: unless-stopped
+    networks:
+      center-server: null
+  frontend:
+    build:
+      context: ./center_app
+    ports:
+      - 7775:8000
+    volumes:
+      - ./center_app/src:/center_app/src
+      - ./center_app/config:/center_app/config
+    networks:
+      center-server: null
+    restart: unless-stopped
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.5.1
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      center-server: null
+    restart: unless-stopped
+
+  broker:
+    image: confluentinc/cp-server:5.5.1
+    hostname: broker
+    container_name: broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://192.168.10.162:9092
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9101
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: broker:29092
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    networks:
+      center-server: null
+    restart: unless-stopped
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:5.5.1
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - zookeeper
+      - broker
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+    networks:
+      center-server: null
+    restart: unless-stopped
+
+  connect:
+    image: cnfldemos/cp-server-connect-datagen:0.3.2-5.5.0
+    hostname: connect
+    container_name: connect
+    depends_on:
+      - zookeeper
+      - broker
+      - schema-registry
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONNECT_REST_ADVERTISED_HOST_NAME: connect
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      # CLASSPATH required due to CC-2422
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-5.5.1.jar
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
+    networks:
+      center-server: null
+    restart: unless-stopped
+
+  ksqldb-server:
+    image: confluentinc/cp-ksqldb-server:5.5.1
+    hostname: ksqldb-server
+    container_name: ksqldb-server
+    depends_on:
+      - broker
+      - connect
+    ports:
+      - "8088:8088"
+    environment:
+      KSQL_CONFIG_DIR: "/etc/ksql"
+      KSQL_BOOTSTRAP_SERVERS: "broker:29092"
+      KSQL_HOST_NAME: ksqldb-server
+      KSQL_LISTENERS: "http://0.0.0.0:8088"
+      KSQL_CACHE_MAX_BYTES_BUFFERING: 0
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      KSQL_KSQL_CONNECT_URL: "http://connect:8083"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    networks:
+      center-server: null
+    restart: unless-stopped
+      
+volumes:
+  postgres_db_center: null
+  pgadmin_center: null
+  build_folder: null
+networks:
+  center-server:
+    driver: bridge

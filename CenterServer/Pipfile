@@ -1,0 +1,41 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+psycopg2-binary = "*"
+djangorestframework = "==3.12.2"
+django-cors-headers = "*"
+python-dotenv = "*"
+urllib3 = "*"
+requests = "*"
+channels = "*"
+drf-yasg = "~=1.20.0"
+drf-spectacular = "*"
+django-filter = "*"
+packaging = "*"
+pillow = "*"
+celery = "*"
+gunicorn = "*"
+pygments = "*"
+djangorestframework-simplejwt = "*"
+djoser = "*"
+channels-redis = "*"
+pandas = "*"
+numpy = "*"
+scikit-learn = "*"
+graphviz = "*"
+beautifulsoup4 = "*"
+APScheduler = "*"
+twilio = "*"
+aspose-words = "==23.2.0"
+reportlab = "*"
+xlsxwriter = "*"
+python-docx = "==0.8.11"
+elasticsearch = "*"
+[dev-packages]
+
+[requires]
+python_version = "3.9"
