@@ -15,7 +15,7 @@ import Animate from 'rc-animate';
 import React, { useEffect, useState } from 'react';
 import { useModel } from 'umi';
 import AlertSelection from './AlertSelection';
-import DashboardDonVi from './DashBoardDonVi';
+// import DashboardDonVi from './DashBoardDonVi';
 
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
@@ -86,38 +86,17 @@ const Device = ({ }) => {
                   </div>
                 </Animate>
               </Descriptions.Item>
-              <Descriptions.Item label="Port" span={2}>
+              <Descriptions.Item label="Redis Port" span={2}>
                 <Animate showProp="show" transitionName="fade">
                   <div className="code-box-shape">
-                    {recordDevice?.port ?? ''}
+                    {recordDevice?.redis_port ?? ''}
                   </div>
                 </Animate>
               </Descriptions.Item>
-              <Descriptions.Item label="Name">
+              <Descriptions.Item label="Tên đơn vị">
                 <Animate showProp="show" transitionName="fade">
                   <div className="code-box-shape">
                     {recordDevice?.name ?? ''}
-                  </div>
-                </Animate>
-              </Descriptions.Item>
-              <Descriptions.Item label="Domain" span={2}>
-                <Animate showProp="show" transitionName="fade">
-                  <div className="code-box-shape">
-                    {recordDevice?.domain ?? ''}
-                  </div>
-                </Animate>
-              </Descriptions.Item>
-              <Descriptions.Item label="Protocol">
-                <Animate showProp="show" transitionName="fade">
-                  <div className="code-box-shape">
-                    {recordDevice?.protocol ?? ''}
-                  </div>
-                </Animate>
-              </Descriptions.Item>
-              <Descriptions.Item label="Địa chỉ Mac" span={2}>
-                <Animate showProp="show" transitionName="fade">
-                  <div className="code-box-shape">
-                    {recordDevice?.mac_addr ?? ''}
                   </div>
                 </Animate>
               </Descriptions.Item>
@@ -128,14 +107,6 @@ const Device = ({ }) => {
                   </div>
                 </Animate>
               </Descriptions.Item>
-
-              <Descriptions.Item label="Trạng thái">
-                <Animate showProp="show" transitionName="fade">
-                  <div className="code-box-shape">
-                    {recordDevice?.status === true ? "Đang hoạt động" : "Không hoạt động"}
-                  </div>
-                </Animate>
-              </Descriptions.Item>
               <Descriptions.Item label="Email" >
                 <Animate showProp="show" transitionName="fade">
                   <div className="code-box-shape">
@@ -143,7 +114,7 @@ const Device = ({ }) => {
                   </div>
                 </Animate>
               </Descriptions.Item>
-              <Descriptions.Item label="Phone" span={2}>
+              <Descriptions.Item label="Số điện thoại" span={2}>
                 <Animate showProp="show" transitionName="fade">
                   <div className="code-box-shape">
                     {recordDevice?.phone ?? ''}
@@ -167,7 +138,7 @@ const Device = ({ }) => {
             </Descriptions>
           </div>
           <div style={{ marginTop: '24px' }}>
-            <DashboardDonVi />
+            {/* <DashboardDonVi /> */}
           </div>
           <Drawer title="Cập nhập" width={720} onClose={onClose} open={donviModel.visibleForm} >
             <FormDonVi />

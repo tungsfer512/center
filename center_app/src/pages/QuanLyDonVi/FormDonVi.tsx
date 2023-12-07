@@ -64,44 +64,23 @@ const FormDonVi = () => {
           <Form.Item label="Ip" name="ip" rules={[...rules.required]}>
             <Input placeholder="Ip" name='ip' />
           </Form.Item>
-          <Form.Item label="Port" name="port" rules={[...rules.required]}>
-            <Input placeholder="Port" type='number' name="port"/>
+          <Form.Item label="Redis Port" name="redis_port" rules={[...rules.required]}>
+            <Input placeholder="Redis Port" type='number' name="redis_port"/>
           </Form.Item>
-          <Form.Item label="Name" name="name" rules={[...rules.required]}>
-            <Input placeholder="Name" name="name"/>
-          </Form.Item>
-          <Form.Item label="Domain" name="domain" rules={[...rules.required]}>
-            <Input placeholder="Domain" name="domain"/>
-          </Form.Item>
-          <Form.Item label="Protocol" name="protocol" rules={[...rules.required]}>
-            <Input placeholder="Protocol" name="protocol"/>
-          </Form.Item>
-          <Form.Item label="Username" name="username" rules={[...rules.required]}>
-            <Input placeholder="Username" name="username"/>
-          </Form.Item>
-          <Form.Item label="Password" name="password" rules={[...rules.required]}>
-            <Input placeholder="Password" name="password"/>
-          </Form.Item>
-          <Form.Item label="Mac Address" name="mac_addr" rules={[...rules.required]}>
-            <Input placeholder="Mac Address" name="mac_addr"/>
+          <Form.Item label="Tên đơn vị" name="name" rules={[...rules.required]}>
+            <Input placeholder="Tên đơn vị" name="name"/>
           </Form.Item>
           <Form.Item label="Email" name="email" rules={[...rules.required]}>
             <Input placeholder="Email" name="email"/>
           </Form.Item>
-          <Form.Item label="Phone" name="phone" rules={[...rules.required]}>
-            <Input placeholder="Phone" name="phone"/>
+          <Form.Item label="Số điện thoại" name="phone" rules={[...rules.required]}>
+            <Input placeholder="Số điện thoại" name="phone"/>
           </Form.Item>
           <Form.Item label="Telegram ID" name="telegram_id" rules={[...rules.required]}>
             <Input placeholder="Telegram ID" name="telegram_id"/>
           </Form.Item>
-          <Form.Item label="Address" name="address">
-            <Input placeholder="Address" name="address"/>
-          </Form.Item>
-          <Form.Item label="Trạng thái" name="status">
-            <Select defaultValue={false} onChange={(value) => setStatus(value)}>
-              <Select.Option value={true}>Hoạt động</Select.Option>
-              <Select.Option value={false}>Không hoạt động</Select.Option>
-            </Select>
+          <Form.Item label="Địa chỉ" name="address">
+            <Input placeholder="Địa chỉ" name="address"/>
           </Form.Item>
           <Form.Item label="Avatar">
             <Input placeholder="Avatar" type='file' name="avatar"/>

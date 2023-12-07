@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 django = "*"
+apscheduler = "==3.8.1"
 psycopg2-binary = "*"
 djangorestframework = "==3.12.2"
 django-cors-headers = "*"

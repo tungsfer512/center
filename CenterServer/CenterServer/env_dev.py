@@ -19,6 +19,7 @@ def set_env():
     r.set("TWILIO_AUTH_TOKEN", "9a4f8c604d9d1c26b668ccf5cecd6e83")
     r.set("AUTO_SEND_TELE_SECOND", "-1")
     r.set("TELEGRAM_BOT_API_TOKEN", "6340000511:AAHRacEXR8AfXKZOAp14NAm7VRFgG6Gjt2I")
+    r.set("AUTO_GET_DISTRIBUTED_LIST_SECONDS", "30")
 
 def get_env(key, default_value=None):
     value = r.get(key).decode("utf-8")

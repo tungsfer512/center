@@ -16,11 +16,11 @@ const DashboardDonVi = () => {
   const dataIPS = dashboard?.dataIPS??[];
   const pathname = window.location.pathname;
   const recordId = pathname.split('/')[2];
-  useEffect(() => {
-    // dashboard.getAllDeviceDonVi({id: recordId})
-    dashboard.getDataDashboard({id: recordId});
-    // dashboard.getIPSData({id: recordId});
-  }, []);
+  // useEffect(() => {
+  //   // dashboard.getAllDeviceDonVi({id: recordId})
+  //   dashboard.getDataDashboard({id: recordId});
+  //   // dashboard.getIPSData({id: recordId});
+  // }, []);
 
   return (
     <Spin spinning={dashboard?.loading || false}>

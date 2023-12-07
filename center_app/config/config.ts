@@ -34,13 +34,13 @@ export default defineConfig({
   },
   // umi routes: https://umijs.org/docs/routing
   routes: [
-    {
-      path: '/admin/login',
-      layout: false,
-      hideInMenu: true,
-      name: 'login',
-      component: './user/Login/adminlogin',
-    },
+    // {
+    //   path: '/admin/login',
+    //   layout: false,
+    //   hideInMenu: true,
+    //   name: 'login',
+    //   component: './user/Login/adminlogin',
+    // },
     {
       path: '/user',
       layout: false,
@@ -57,31 +57,31 @@ export default defineConfig({
           path: '/user',
           redirect: '/user/login',
         },
-        {
-          name: 'register',
-          icon: 'smile',
-          path: '/user/register',
-          component: './user/register',
-        },
+        // {
+        //   name: 'register',
+        //   icon: 'smile',
+        //   path: '/user/register',
+        //   component: './user/register',
+        // },
         {
           component: '404',
         },
       ],
     },
-    {
-      hideInMenu: true,
-      name: 'account',
-      icon: 'user',
-      path: '/account',
-      routes: [
-        {
-          name: 'center',
-          icon: 'smile',
-          path: '/account/center',
-          component: './account/center',
-        },
-      ],
-    },
+    // {
+    //   hideInMenu: true,
+    //   name: 'account',
+    //   icon: 'user',
+    //   path: '/account',
+    //   routes: [
+    //     {
+    //       name: 'center',
+    //       icon: 'smile',
+    //       path: '/account/center',
+    //       component: './account/center',
+    //     },
+    //   ],
+    // },
     {
       path: `/dashboard`,
       // target: '_blank',
@@ -100,35 +100,35 @@ export default defineConfig({
       maChucNang: 'QUAN_LI_DON_VI',
       access: 'permisionMenu',
     },
-    {
-      hideInMenu: false,
-      layout: true,
-      name: 'snort',
-      path: '/snort',
-      icon: 'AntCloudOutlined',
-      component: './snort',
-      maChucNang: 'SNORT',
-      access: 'permisionMenu',
-    },
-    {
-      path: '/black-white-list',
-      name: 'danhsachkiemsoatip',
-      icon: 'WifiOutlined',
-      maChucNang: 'QUAN_LI_IP',
-      access: 'permisionMenu',
-      routes: [
-        {
-          path: './black-list',
-          name: 'blacklistip',
-          component: './QuanLyDanhSachIp/BlackListIp',
-        },
-        {
-          path: './white-list',
-          name: 'whitelistip',
-          component: './QuanLyDanhSachIp/WhiteListIp',
-        },
-      ]
-    },
+    // {
+    //   hideInMenu: false,
+    //   layout: true,
+    //   name: 'snort',
+    //   path: '/snort',
+    //   icon: 'AntCloudOutlined',
+    //   component: './snort',
+    //   maChucNang: 'SNORT',
+    //   access: 'permisionMenu',
+    // },
+    // {
+    //   path: '/black-white-list',
+    //   name: 'danhsachkiemsoatip',
+    //   icon: 'WifiOutlined',
+    //   maChucNang: 'QUAN_LI_IP',
+    //   access: 'permisionMenu',
+    //   routes: [
+    //     {
+    //       path: './black-list',
+    //       name: 'blacklistip',
+    //       component: './QuanLyDanhSachIp/BlackListIp',
+    //     },
+    //     {
+    //       path: './white-list',
+    //       name: 'whitelistip',
+    //       component: './QuanLyDanhSachIp/WhiteListIp',
+    //     },
+    //   ]
+    // },
     {
       path: './don-vi/:id',
       name: 'chitietdonvi',
@@ -186,50 +186,50 @@ export default defineConfig({
 
       ],
     },
-    {
-      path: '/setting',
-      name: 'setting',
-      icon: 'SettingOutlined',
-      maChucNang: 'CAI_DAT',
-      access: 'permisionMenu',
-      routes: [
-        // {
-        //   path: './setting-agent',
-        //   name: 'Tự động cập nhập Agent',
-        //   component: './Setting/SettingAgent.tsx',
-        // },
-        // {
-        //   path: './setting-black-list',
-        //   name: 'settingblacklist',
-        //   component: './Setting/SettingBlackList.tsx',
-        // },
-        // {
-        //   path: './setting-white-list',
-        //   name: 'settingwhitelist',
-        //   component: './Setting/SettingWhiteList.tsx',
-        // },
-        {
-          path: './setting-distributed',
-          name: 'setting-distributed',
-          component: './Setting/SettingDistributed.tsx',
-          // access: 'permisionMenu',
-        },
-      ],
-    },
-    {
-      layout: false,
-      path: '/kichhoattaikhoan',
-      component: './KichHoatTaiKhoan',
-      hideInMenu: true,
-      access: 'thiSinhChuaKichHoat',
-    },
-    {
-      layout: false,
-      path: '/verifycccd',
-      component: './VerifyCCCD',
-      hideInMenu: true,
-      access: 'thiSinhChuaKichHoat',
-    },
+    // {
+    //   path: '/setting',
+    //   name: 'setting',
+    //   icon: 'SettingOutlined',
+    //   maChucNang: 'CAI_DAT',
+    //   access: 'permisionMenu',
+    //   routes: [
+    //     // {
+    //     //   path: './setting-agent',
+    //     //   name: 'Tự động cập nhập Agent',
+    //     //   component: './Setting/SettingAgent.tsx',
+    //     // },
+    //     // {
+    //     //   path: './setting-black-list',
+    //     //   name: 'settingblacklist',
+    //     //   component: './Setting/SettingBlackList.tsx',
+    //     // },
+    //     {
+    //       path: './setting-distributed',
+    //       name: 'Thiết lập phân tải',
+    //       component: './Setting/SettingDistributed.tsx',
+    //     },
+    //     {
+    //       path: './setting-message',
+    //       name: 'Thiết lập thông báo',
+    //       component: './Setting/SettingMessage.tsx',
+    //       // access: 'permisionMenu',
+    //     },
+    //   ],
+    // },
+    // {
+    //   layout: false,
+    //   path: '/kichhoattaikhoan',
+    //   component: './KichHoatTaiKhoan',
+    //   hideInMenu: true,
+    //   access: 'thiSinhChuaKichHoat',
+    // },
+    // {
+    //   layout: false,
+    //   path: '/verifycccd',
+    //   component: './VerifyCCCD',
+    //   hideInMenu: true,
+    //   access: 'thiSinhChuaKichHoat',
+    // },
 
     {
       path: '/',

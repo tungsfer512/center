@@ -14,11 +14,11 @@ ENV DJANGO_CORS_ORIGIN_WHITELIST $DJANGO_CORS_ORIGIN_WHITELIST
 RUN apt-get update
 RUN apt-get install -y gcc python3-dev musl-dev  libffi-dev
 RUN apt-get install -y libpcap-dev
-RUN apt-get --no-install-recommends install libreoffice -y
-RUN apt-get install -y libreoffice-java-common
-RUN apt-get install -y default-jdk
+# RUN apt-get --no-install-recommends install libreoffice -y
+# RUN apt-get install -y libreoffice-java-common
+# RUN apt-get install -y default-jdk
 
-RUN apt-get install -y graphviz
+# RUN apt-get install -y graphviz
 
 RUN mkdir /CenterServer
 WORKDIR /CenterServer
@@ -29,7 +29,7 @@ COPY . .
 RUN pip install -r requirements.txt
 RUN pip install django==3.2
 RUN pip install djangorestframework
-RUN pip install ksql
+# RUN pip install ksql
 
 
 EXPOSE 9000

@@ -4,7 +4,7 @@ import styles from './index.less';
 import Title from 'antd/lib/typography/Title';
 import SettingAgent from './SettingAgent';
 import SettingBlackList from './SettingBlackList';
-import SettingWhiteList from './SettingWhiteList';
+import SettingWhiteList from './SettingDistributed';
 
 import { Collapse } from 'antd';
 

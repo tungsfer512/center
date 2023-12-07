@@ -78,7 +78,7 @@ const Index = () => {
       ),
     },
     {
-      title: 'Name',
+      title: 'Tên đơn vị',
       dataIndex: 'name',
       search: 'search',
       notRegex: true,
@@ -94,8 +94,8 @@ const Index = () => {
       align: 'center',
     },
     {
-      title: 'Domain',
-      dataIndex: 'domain',
+      title: 'Redis Port',
+      dataIndex: 'redis_port',
       search: 'search',
       notRegex: true,
       width: 200,
@@ -118,7 +118,7 @@ const Index = () => {
       align: 'center',
     },
     {
-      title: 'Phone',
+      title: 'Số điện thoại',
       dataIndex: 'phone',
       search: 'search',
       notRegex: true,
@@ -126,36 +126,8 @@ const Index = () => {
       align: 'center',
     },
     {
-      title: 'Address',
+      title: 'Địa chỉ',
       dataIndex: 'address',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
-    {
-      title: 'Protocol',
-      dataIndex: 'protocol',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
-    {
-      title: 'Mac Address',
-      dataIndex: 'mac_addr',
-      search: 'search',
-      render: (value: any, record: IDonViRecord) => <span>{record.mac_addr === null ? '' : record.mac_addr}</span>,
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      render: (value: any, record: IDonViRecord) => (
-        <span>{record.status === true ? 'Hoạt động' : 'Không hoạt động'}</span>
-      ),
       search: 'search',
       notRegex: true,
       width: 200,
@@ -172,9 +144,9 @@ const Index = () => {
 
   return (
     <>
-    <Card title="Sơ đồ phân tải hệ thống" style={{ marginBottom: 20 }}>
+    {/* <Card title="Sơ đồ phân tải hệ thống" style={{ marginBottom: 20 }}>
       <DistributionGraph />
-    </Card>
+    </Card> */}
       <TableBase
         modelName={'donvi'}
         title="Quản lý danh sách đơn vị"

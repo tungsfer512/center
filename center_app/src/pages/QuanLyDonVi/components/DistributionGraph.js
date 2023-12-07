@@ -201,33 +201,9 @@ const DistributionGraph = () => {
             color: "#5C8984",
             value: 0,
         },
-        // nodes: {
-        //     color: {
-        //         border: "red",
-        //         hover: {
-        //             border: "red",
-        //         },
-        //         hightlight: {
-        //             border: "red",
-        //         },
-        //     },
-        //     borderWidth: 0,
-        //     borderWidthSelected: 0,
-        //     font: {
-        //         color: "white",
-        //     },
-        // },
         layout: {
             randomSeed: 1000
         },
-    };
-    function myFunction() {
-        console.log("Icon image clicked!");
-    }
-    const handleNodeClick = (event) => {
-        console.log("click event is happened");
-        console.log("click event is happened in handlenode click");
-        console.log(event);
     };
 
     return (
@@ -237,7 +213,6 @@ const DistributionGraph = () => {
                 ref={graphRef}
                 options={options}
                 events={{
-                    click: handleNodeClick,
                     dragEnd: (event) => {
                         console.log("dragEnd Event:", event);
                         // setData(_data)
@@ -299,7 +274,6 @@ const DistributionGraph = () => {
                                     iconWidth,
                                     iconHeight
                                 );
-                                iconImg.addEventListener("mouseover", myFunction, "false");
                             }
                         });
                     });

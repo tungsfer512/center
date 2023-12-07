@@ -57,8 +57,6 @@ INSTALLED_APPS = [
     'group_menus.apps.GroupMenusConfig',
     'djoser',
     'rest_framework.authtoken',
-    'snorts.apps.SnortsConfig',
-    'setting.apps.Setting',
     
 ]
 

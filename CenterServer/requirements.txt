@@ -93,3 +93,4 @@ reportlab
 elasticsearch
 redis
 paramiko
+apscheduler==3.8.1
