@@ -192,25 +192,20 @@ class BestAnalyzer(ListCreateAPIView):
             for device in devices:
                 cpu_ram = json.loads(r.get(f"cpu_ram_{device.get('ip')}").decode())
                 print(cpu_ram)
-                cpu_left = (100 - int(cpu_ram.get("cpu"))) * int(device.get("cpu_core"))
-                ram_left = (100 - int(cpu_ram.get("ram"))) * int(device.get("ram_max"))
-                weight = cpu_left * ram_left
-                sum_weights += weight
-                device_lefts.append(
-                    {
-                        "ip": device.get("ip"),
-                        "weight": weight
-                    }
-                )
+                current_cpu = int(cpu_ram.get("cpu"))
+                current_ram = int(cpu_ram.get("ram"))
+                
+                if current_cpu < 90 and current_ram < 90:
+                    cpu_left = (100 - current_cpu) * int(device.get("cpu_core"))
+                    ram_left = (100 - current_ram) * int(device.get("ram_max"))
+                    weight = cpu_left * ram_left
+                    device_lefts.append(
+                        {
+                            "ip": device.get("ip"),
+                            "weight": weight
+                        }
+                    )
             print(device_lefts)
-            print(sum_weights)
-            for device in device_lefts:
-                weights.append(
-                    {
-                        "ip": device.get("ip"),
-                        "weight": round(((int(device.get("weight"))) / sum_weights) * 10)
-                    }
-                )
-            return Response(weights, status=status.HTTP_200_OK)
+            return Response(device_lefts, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
