@@ -8,4 +8,5 @@ router.register(r'IoTAnalyzerDevices', views.IoTAnalyzerDevicesView)
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
     path('', include(router.urls)),
+    path('devices/best-analyzer', views.BestAnalyzer.as_view()),
 ]

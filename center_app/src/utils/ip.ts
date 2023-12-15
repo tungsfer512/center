@@ -1,7 +1,7 @@
 const ip3 = 'http://25.31.77.102:9090'; // ip dev
 // const ip = 'http://25.31.77.102:9090'; // ip dev
-const ip = 'http://localhost:7774'; // ip dev
-const DashboardBlank = 'http://localhost:7771/';
+const ip = 'http://222.252.29.85:17774'; // ip dev
+const DashboardBlank = 'http://222.252.29.85:17771/';
 
 const ipPayment = 'https://tssv3.aisenote.com/payment'; // ip dev
 

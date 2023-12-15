@@ -8,10 +8,13 @@ from rest_framework import status, parsers
 from rest_framework.decorators import action
 from devices.serializers import *
 from rest_framework import permissions
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+
 import json
 import os
 import requests
 from django.utils import timezone
+from CenterServer.env_dev import get_env
 
 # Create your views here.
 
@@ -158,3 +161,56 @@ class DistribtionGraphView(APIView):
         return Response(resData, status=status.HTTP_200_OK)
         # except Exception as e:
         #     return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class BestAnalyzer(ListCreateAPIView):
+    serializer_class = DevicesSerializer
+    queryset = Devices.objects.all()
+    
+    def list(self, request):
+        try:
+            r = redis.Redis(host=get_env("REDIS_SERVER"), port=6379, db=0)
+            devices = [
+                {
+                    "ip": "127.0.0.1",
+                    "cpu_core": 8,
+                    "ram_max": 16
+                },
+                {
+                    "ip": "192.168.10.73",
+                    "cpu_core": 16,
+                    "ram_max": 40
+                },
+                {
+                    "ip": "192.168.10.171",
+                    "cpu_core": 24,
+                    "ram_max": 32
+                }
+            ]
+            weights = []
+            device_lefts = []
+            sum_weights = 0
+            for device in devices:
+                cpu_ram = json.loads(r.get(f"cpu_ram_{device.get('ip')}").decode())
+                print(cpu_ram)
+                cpu_left = (100 - int(cpu_ram.get("cpu"))) * int(device.get("cpu_core"))
+                ram_left = (100 - int(cpu_ram.get("ram"))) * int(device.get("ram_max"))
+                weight = cpu_left * ram_left
+                sum_weights += weight
+                device_lefts.append(
+                    {
+                        "ip": device.get("ip"),
+                        "weight": weight
+                    }
+                )
+            print(device_lefts)
+            print(sum_weights)
+            for device in device_lefts:
+                weights.append(
+                    {
+                        "ip": device.get("ip"),
+                        "weight": round(((int(device.get("weight"))) / sum_weights) * 10)
+                    }
+                )
+            return Response(weights, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)

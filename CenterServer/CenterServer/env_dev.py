@@ -20,6 +20,9 @@ def set_env():
     r.set("AUTO_SEND_TELE_SECOND", "-1")
     r.set("TELEGRAM_BOT_API_TOKEN", "6340000511:AAHRacEXR8AfXKZOAp14NAm7VRFgG6Gjt2I")
     r.set("AUTO_GET_DISTRIBUTED_LIST_SECONDS", "30")
+    r.set("REDIS_SERVER", "redis_center_server")
+    r.set("TOPIC_SEND_SERVER", "topic_center_server")
+    r.set("ELASTIC_SERVER", "http://es-container-center:9200")
 
 def get_env(key, default_value=None):
     value = r.get(key).decode("utf-8")
