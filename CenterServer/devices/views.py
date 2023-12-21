@@ -190,7 +190,10 @@ class BestAnalyzer(ListCreateAPIView):
             device_lefts = []
             sum_weights = 0
             for device in devices:
-                cpu_ram = json.loads(r.get(f"cpu_ram_{device.get('ip')}").decode())
+                tmp_data = r.get(f"cpu_ram_{device.get('ip')}")
+                if tmp_data == None:
+                    continue
+                cpu_ram = json.loads(tmp_data.decode())
                 print(cpu_ram)
                 current_cpu = int(cpu_ram.get("cpu"))
                 current_ram = int(cpu_ram.get("ram"))
